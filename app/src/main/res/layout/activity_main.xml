@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainActivity">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/settings_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_menu"
+        android:background="@color/colorTransparent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp">
+    </androidx.appcompat.widget.AppCompatImageButton>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/traffic_lights_iv"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/traffic_lights"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/settings_btn">
+    </androidx.appcompat.widget.AppCompatImageView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/about_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name_main_activity"
+        android:textAlignment="center"
+        android:textSize="19sp"
+        android:letterSpacing="0.01"
+        android:textColor="@color/colorMain"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:layout_below="@+id/traffic_lights_iv"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp">
+    </androidx.appcompat.widget.AppCompatTextView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/options_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/about_tv">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/videocam_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_videocam"
+            android:background="@color/colorTransparent"
+            android:layout_margin="32dp">
+        </androidx.appcompat.widget.AppCompatImageButton>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/photocam_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_photo_camera"
+            android:background="@color/colorTransparent"
+            android:layout_margin="32dp">
+        </androidx.appcompat.widget.AppCompatImageButton>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/road_iv"
+        android:layout_width="match_parent"
+        android:layout_height="274dp"
+        app:srcCompat="@drawable/road"
+        android:layout_alignParentBottom="true">
+    </androidx.appcompat.widget.AppCompatImageView>
+
+</RelativeLayout>

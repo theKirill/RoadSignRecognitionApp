@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RoadSignRecognition</string>
+    <string name="app_name_main_activity">Распознаватель дорожных знаков в режиме реального времени</string>
+</resources>
