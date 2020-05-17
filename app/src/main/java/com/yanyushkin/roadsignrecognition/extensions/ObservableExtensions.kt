@@ -1,4 +1,4 @@
-package com.yanyushkin.roadsignrecognition
+package com.yanyushkin.roadsignrecognition.extensions
 
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

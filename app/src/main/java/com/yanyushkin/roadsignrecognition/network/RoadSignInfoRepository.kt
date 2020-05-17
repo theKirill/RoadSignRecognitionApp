@@ -1,7 +1,7 @@
 package com.yanyushkin.roadsignrecognition.network
 
 import com.yanyushkin.roadsignrecognition.network.api.RoadSignInfoApi
-import com.yanyushkin.roadsignrecognition.sendRequestInBackground
+import com.yanyushkin.roadsignrecognition.extensions.sendRequestInBackground
 import javax.inject.Inject
 
 class RoadSignInfoRepository @Inject constructor(private val roadSignInfoApi: RoadSignInfoApi) {

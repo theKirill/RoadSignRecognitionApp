@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">RoadSignRecognition</string>
-    <string name="app_name_main_activity">Распознаватель дорожных знаков в режиме реального времени</string>
+    <string name="main_app_name_text">Распознаватель дорожных знаков в режиме реального времени</string>
+    <string name="request_camera_permission_sb">Увы, без камеры ничего не распознаем!</string>
 </resources>
