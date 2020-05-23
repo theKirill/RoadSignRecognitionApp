@@ -15,6 +15,8 @@ import com.yanyushkin.roadsignrecognition.IMAGE_PATH_KEY
 import kotlinx.android.synthetic.main.activity_photo.*
 import com.yanyushkin.roadsignrecognition.R
 import com.yanyushkin.roadsignrecognition.domain.RoadSignInfo
+import com.yanyushkin.roadsignrecognition.extensions.gone
+import com.yanyushkin.roadsignrecognition.extensions.show
 import com.yanyushkin.roadsignrecognition.extensions.showSnackBar
 import com.yanyushkin.roadsignrecognition.states.ScreenState
 import com.yanyushkin.roadsignrecognition.utils.BaseViewModelFactory
@@ -50,13 +52,21 @@ class PhotoActivity : AppCompatActivity() {
     private fun initObservers() {
         photoVM.state.observe(this, Observer {
             when (it) {
-                ScreenState.SUCCESS -> fillSignInfo(photoVM.sign.value!!)
-                ScreenState.ERROR_NO_INTERNET -> showSnackBar(
-                    photo_main_layout,
-                    this,
-                    R.string.no_internet_sb
-                )
-                ScreenState.ERROR_OTHER -> showSnackBar(photo_main_layout, this, R.string.error_sb)
+                ScreenState.SUCCESS -> {
+                    fillSignInfo(photoVM.sign.value!!)
+                    all_info_layout.show()
+                    progress_layout.gone()
+                }
+                ScreenState.ERROR_NO_INTERNET -> {
+                    showSnackBar(
+                        photo_main_layout,
+                        this,
+                        R.string.no_internet_sb
+                    )
+                }
+                ScreenState.ERROR_OTHER -> {
+                    showSnackBar(photo_main_layout, this, R.string.error_sb)
+                }
             }
         })
     }
@@ -64,7 +74,6 @@ class PhotoActivity : AppCompatActivity() {
     private fun fillSignInfo(sign: RoadSignInfo) {
         sign_name_tv.text = sign.name
         sign_type_tv.text = sign.type
-        sign_type_tv.text = "sign.type"
         Glide
             .with(this)
             .load(sign.img)

@@ -1,5 +1,6 @@
 package com.yanyushkin.roadsignrecognition.ui.photo
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yanyushkin.roadsignrecognition.App
@@ -22,8 +23,8 @@ class PhotoVM : ViewModel() {
 
     fun getSignInfo(id: Int) =
         repository.getSignInfo(id).subscribe({
-            state.value = ScreenState.SUCCESS
             sign.value = it.result!!.transform()
+            state.value = ScreenState.SUCCESS
         }, {
             if (it is UnknownHostException)
                 state.value = ScreenState.ERROR_NO_INTERNET
