@@ -9,8 +9,8 @@
     android:background="@drawable/bottom_sheet_bg"
     android:orientation="vertical"
     android:padding="8dp"
-    app:behavior_hideable="true"
-    app:behavior_peekHeight="150dp"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="160dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
@@ -30,20 +30,21 @@
     <LinearLayout
         android:id="@+id/general_info_layout"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="140dp"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/sign_image_iv"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/sign70" />
+            android:scaleType="fitXY"
+            android:layout_gravity="center_vertical"
+            tools:src="@drawable/sign70" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp">
+            android:layout_margin="16dp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/sign_name_tv"
@@ -71,6 +72,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorBlack"
-        tools:text="\t\t\tДанный знак предупреждает о приближении к железнодорожному переезду со шлагбаумом. Наличие шлагбаума является дополнительным средством регулирования при пересечении жд путей. При <b>опущенном</b> или <b>начинающем опускаться шлагбауме</b> водитель должен <b>остановиться не ближе 5 метров</b> от него (если нет стоп-линии или таблички 6.16), и это не зависит от указаний светофора. Помимо этого правила запрещают самовольно открывать шлагбаум (Смотрим 15 раздел ПДД)" />
+        android:gravity="center"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

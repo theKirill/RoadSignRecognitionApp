@@ -2,6 +2,7 @@ package com.yanyushkin.roadsignrecognition.di
 
 import com.yanyushkin.roadsignrecognition.BASE_URL
 import com.yanyushkin.roadsignrecognition.BuildConfig
+import com.yanyushkin.roadsignrecognition.network.AuthInterceptor
 import com.yanyushkin.roadsignrecognition.network.api.RoadSignInfoApi
 import dagger.Module
 import dagger.Provides
@@ -22,7 +23,10 @@ class NetworkModule {
         if (BuildConfig.DEBUG) {
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
-            okHttpClientBuilder.addInterceptor(interceptor)
+            with(okHttpClientBuilder) {
+                addInterceptor(interceptor)
+                addInterceptor(AuthInterceptor())
+            }
         }
         return okHttpClientBuilder.build()
     }

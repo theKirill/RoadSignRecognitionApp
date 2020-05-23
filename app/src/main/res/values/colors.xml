@@ -8,4 +8,6 @@
     <color name="colorWarning">#f76d6d</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorHint">#E63C3A3A</color>
+    <color name="colorTextHint">#B7B7B7</color>
 </resources>

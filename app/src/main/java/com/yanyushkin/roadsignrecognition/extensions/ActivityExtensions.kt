@@ -12,9 +12,12 @@ import com.yanyushkin.roadsignrecognition.SNACKBAR_DURATION
 fun AppCompatActivity.showSnackBar(view: View, context: AppCompatActivity, messageId: Int) {
     val snackBar = Snackbar.make(view, messageId, Snackbar.LENGTH_LONG)
     val snackBarView = snackBar.view
-    snackBarView.setBackgroundColor(ContextCompat.getColor(context,
-        R.color.colorWarning
-    ))
+    snackBarView.setBackgroundColor(
+        ContextCompat.getColor(
+            context,
+            R.color.colorWarning
+        )
+    )
     snackBar.apply {
         duration = SNACKBAR_DURATION
         show()

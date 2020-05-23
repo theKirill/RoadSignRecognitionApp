@@ -2,9 +2,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/photo_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PhotoActivity">
+    tools:context=".ui.photo.PhotoActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/photo_iv"
@@ -12,6 +13,14 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         tools:src="@drawable/photo_example"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/close_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/ic_background_btn"
+        android:src="@drawable/ic_close"/>
 
     <include
         android:id="@+id/bottom_sheet_layout"

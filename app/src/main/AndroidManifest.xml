@@ -3,6 +3,7 @@
     package="com.yanyushkin.roadsignrecognition">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"
@@ -12,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PhotoActivity"></activity>
+        <activity android:name=".ui.photo.PhotoActivity"></activity>
         <activity android:name=".ui.PhotoCamActivity" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>

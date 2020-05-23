@@ -1,14 +1,28 @@
 package com.yanyushkin.roadsignrecognition.network.responses
 
 import com.google.gson.annotations.SerializedName
+import com.yanyushkin.roadsignrecognition.domain.RoadSignInfo
 
-data class RoadSignInfoResponse (
+data class RoadSignInfoResponse(
     @SerializedName("id")
-    val id: Int,
+    val id: Int?,
     @SerializedName("name")
-    val name: String,
+    val name: String?,
     @SerializedName("description")
-    val description: String,
+    val description: String?,
     @SerializedName("type")
-    val type: String
-)
+    val type: String?,
+    @SerializedName("important_info")
+    val importantInfo: String?,
+    @SerializedName("img_template_url")
+    val img: String?
+) : BaseResponse<RoadSignInfo> {
+    override fun transform(): RoadSignInfo = RoadSignInfo(
+        id ?: 0,
+        name ?: "",
+        description ?: "",
+        type ?: "",
+        importantInfo ?: "",
+        img ?: ""
+    )
+}
