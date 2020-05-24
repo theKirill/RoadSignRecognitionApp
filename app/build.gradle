@@ -30,6 +30,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    repositories {
+        maven {
+            url "http://maven.google.com/"
+        }
+    }
 }
 
 dependencies {
@@ -69,7 +74,10 @@ dependencies {
     // Tensorflow
     implementation 'org.tensorflow:tensorflow-lite:1.12.0'
 
-    // GLide
+    // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    // Yandex Maps
+    implementation 'com.yandex.android:mapkit:3.5.0'
 }

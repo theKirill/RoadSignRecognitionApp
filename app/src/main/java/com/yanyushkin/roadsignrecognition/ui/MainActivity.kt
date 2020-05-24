@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.yanyushkin.roadsignrecognition.R
+import com.yanyushkin.roadsignrecognition.VideoCamActivity
 import com.yanyushkin.roadsignrecognition.extensions.showSnackBar
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -44,7 +45,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        videocam_btn.setOnClickListener { }
+        videocam_btn.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    VideoCamActivity::class.java
+                )
+            )
+        }
     }
 
     private fun hasAllPermissions(): Boolean =
