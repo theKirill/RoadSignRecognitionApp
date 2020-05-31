@@ -1,31 +1,24 @@
 package com.yanyushkin.roadsignrecognition.ui.photo
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.*
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
-import android.provider.MediaStore
 import android.text.Html
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.yanyushkin.roadsignrecognition.IMAGE_PATH_KEY
-import kotlinx.android.synthetic.main.activity_photo.*
 import com.yanyushkin.roadsignrecognition.R
-import com.yanyushkin.roadsignrecognition.classifier.Classifier
 import com.yanyushkin.roadsignrecognition.domain.RoadSignInfo
 import com.yanyushkin.roadsignrecognition.extensions.gone
 import com.yanyushkin.roadsignrecognition.extensions.show
 import com.yanyushkin.roadsignrecognition.extensions.showSnackBar
 import com.yanyushkin.roadsignrecognition.states.ScreenState
 import com.yanyushkin.roadsignrecognition.utils.BaseViewModelFactory
-import com.yanyushkin.roadsignrecognition.utils.scaleBitmap
+import kotlinx.android.synthetic.main.activity_photo.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
-import java.io.File
 
 class PhotoActivity : AppCompatActivity() {
 

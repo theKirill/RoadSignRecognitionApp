@@ -8,7 +8,6 @@ import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.yanyushkin.roadsignrecognition.R
-import com.yanyushkin.roadsignrecognition.VideoCamActivity
 import com.yanyushkin.roadsignrecognition.extensions.showSnackBar
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -73,6 +72,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_CODE_PERMISSION = 1
         const val PERMISSION_GRANTED = PackageManager.PERMISSION_GRANTED
-        val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }
