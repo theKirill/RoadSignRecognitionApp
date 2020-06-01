@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.text.Html
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,10 +16,12 @@ import com.yanyushkin.roadsignrecognition.domain.RoadSignInfo
 import com.yanyushkin.roadsignrecognition.extensions.gone
 import com.yanyushkin.roadsignrecognition.extensions.show
 import com.yanyushkin.roadsignrecognition.extensions.showSnackBar
+import com.yanyushkin.roadsignrecognition.extensions.toMat
 import com.yanyushkin.roadsignrecognition.states.ScreenState
 import com.yanyushkin.roadsignrecognition.utils.BaseViewModelFactory
 import kotlinx.android.synthetic.main.activity_photo.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
+import org.opencv.android.OpenCVLoader
 
 class PhotoActivity : AppCompatActivity() {
 
@@ -28,10 +31,9 @@ class PhotoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo)
-
         photoVM =
             ViewModelProvider(this, BaseViewModelFactory { PhotoVM(this) }).get(PhotoVM::class.java)
-
+        OpenCVLoader.initDebug()
         initViews()
         photoVM.classify(sourceBitmap)
         initObservers()

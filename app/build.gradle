@@ -35,6 +35,14 @@ android {
             url "http://maven.google.com/"
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'jniLibs'
+            jni {
+                srcDirs 'src/main/jni', 'src/main/jniLibs/'
+            }
+        }
+    }
 }
 
 dependencies {
@@ -80,4 +88,5 @@ dependencies {
 
     // Yandex Maps
     implementation 'com.yandex.android:mapkit:3.5.0'
+    implementation project(path: ':openCVLibrary341')
 }
