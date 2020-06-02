@@ -82,6 +82,9 @@ class PhotoActivity : AppCompatActivity() {
                 }
             }
         })
+        photoVM.kek.observe(this, Observer {
+            photo2_iv.setImageBitmap(photoVM.kek.value!!)
+        })
     }
 
     private fun fillSignInfo(sign: RoadSignInfo) {
