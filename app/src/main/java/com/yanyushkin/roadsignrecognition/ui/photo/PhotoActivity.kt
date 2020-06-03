@@ -66,7 +66,7 @@ class PhotoActivity : AppCompatActivity() {
         photoVM.state.observe(this, Observer {
             when (it) {
                 ScreenState.SUCCESS -> {
-                    fillSignInfo(photoVM.sign.value!!)
+                    fillSignInfo(photoVM.signInfo.value!!)
                     all_info_layout.show()
                     progress_layout.gone()
                 }
@@ -82,8 +82,8 @@ class PhotoActivity : AppCompatActivity() {
                 }
             }
         })
-        photoVM.kek.observe(this, Observer {
-            photo2_iv.setImageBitmap(photoVM.kek.value!!)
+        photoVM.signBitmap.observe(this, Observer {
+            photo2_iv.setImageBitmap(photoVM.signBitmap.value!!)
         })
     }
 

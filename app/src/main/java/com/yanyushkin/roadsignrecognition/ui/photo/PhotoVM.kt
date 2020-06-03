@@ -13,6 +13,7 @@ import com.yanyushkin.roadsignrecognition.extensions.toBitmap
 import com.yanyushkin.roadsignrecognition.extensions.toMat
 import com.yanyushkin.roadsignrecognition.network.RoadSignInfoRepository
 import com.yanyushkin.roadsignrecognition.states.ScreenState
+import com.yanyushkin.roadsignrecognition.utils.OpenCVHelper
 import com.yanyushkin.roadsignrecognition.utils.scaleBitmap
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
@@ -24,8 +25,8 @@ class PhotoVM(context: Context) : ViewModel() {
     @Inject
     lateinit var repository: RoadSignInfoRepository
     val state = MutableLiveData<ScreenState>()
-    val sign = MutableLiveData<RoadSignInfo>()
-    val kek = MutableLiveData<Bitmap>()
+    val signInfo = MutableLiveData<RoadSignInfo>()
+    val signBitmap = MutableLiveData<Bitmap>()
     private val classifier: Classifier
 
     init {
@@ -34,15 +35,16 @@ class PhotoVM(context: Context) : ViewModel() {
     }
 
     fun classify(sourceBitmap: Bitmap) {
-        val newBitmap = kek(sourceBitmap)
-        val scaledBitmap = scaleBitmap(newBitmap)
-        val result = classifier.classify(scaledBitmap)
-        getSignInfo(result)
+        val sign = OpenCVHelper.findSign(sourceBitmap)
+        signBitmap.value = sign
+        val scaledBitmap = scaleBitmap(sign)
+        val signClass = classifier.classify(scaledBitmap)
+        getSignInfo(signClass)
     }
 
     private fun getSignInfo(id: Int) =
         repository.getSignInfo(id).subscribe({
-            sign.value = it.result!!.transform()
+            signInfo.value = it.result!!.transform()
             state.value = ScreenState.SUCCESS
         }, {
             if (it is UnknownHostException)
@@ -50,46 +52,4 @@ class PhotoVM(context: Context) : ViewModel() {
             else
                 state.value = ScreenState.ERROR_OTHER
         })
-
-    private fun kek(bmp: Bitmap): Bitmap {
-        val matrixMAIN = Matrix()
-        matrixMAIN.postRotate(90f)
-        val bmpMain = Bitmap.createBitmap(bmp, 0, 0, bmp.width, bmp.height, matrixMAIN, true)
-
-        val mat = bmpMain.toMat()
-        val hsv = Mat()
-        Imgproc.cvtColor(mat, hsv, Imgproc.COLOR_BGR2HSV)
-        val minValues = Scalar(117.0, 100.0, 45.0)
-        val maxValues = Scalar(255.0, 255.0, 255.0)
-        val frame = Mat()
-        Core.inRange(hsv, minValues, maxValues, frame)
-
-        val contours = ArrayList<MatOfPoint>()
-        Imgproc.findContours(frame.clone(), contours, Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
-        contours.sortByDescending { contour -> Imgproc.contourArea(contour) }
-
-        val boundingRect = Imgproc.boundingRect(contours[0])
-
-        /*Imgproc.rectangle(mat,
-            Point(boundingRect.x.toDouble(), boundingRect.y.toDouble()),
-            Point(boundingRect.x+boundingRect.width.toDouble(),
-                boundingRect.x+boundingRect.height.toDouble()),
-            Scalar(0.0, 0.0, 255.0),5)*/
-
-
-        val sign = Mat(mat, boundingRect)
-
-        var bmp = sign.toBitmap()
-        val matrix = Matrix()
-        matrix.postRotate(90f)
-        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.width, bmp.height, matrix, true)
-
-        var bmp2 = mat.toBitmap()
-        val matrix2 = Matrix()
-        matrix2.postRotate(90f)
-        bmp2 = Bitmap.createBitmap(bmp2, 0, 0, bmp2.width, bmp2.height, matrix2, true)
-        kek.value = sign.toBitmap()
-
-        return bmp
-    }
 }

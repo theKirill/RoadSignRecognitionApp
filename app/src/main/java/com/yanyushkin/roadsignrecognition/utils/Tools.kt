@@ -2,6 +2,7 @@ package com.yanyushkin.roadsignrecognition.utils
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Matrix
 import android.util.Log
 import com.yanyushkin.roadsignrecognition.IMAGE_HEIGHT
 import com.yanyushkin.roadsignrecognition.IMAGE_WIDTH
@@ -23,6 +24,12 @@ fun prepareBitmap(bitmap: Bitmap): Array<Array<Array<FloatArray>>> {
         }
     }
     return result
+}
+
+fun rotateBitmap(bitmap: Bitmap): Bitmap {
+    val matrixMAIN = Matrix()
+    matrixMAIN.postRotate(90f)
+    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrixMAIN, true)
 }
 
 fun getIndexOfMaxElem(array: FloatArray): Int {
