@@ -1,13 +1,14 @@
-package com.yanyushkin.roadsignrecognition.ui
+package com.yanyushkin.roadsignrecognition.ui.video
 
 import android.content.Context
-import android.location.LocationListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import com.google.common.util.concurrent.ListenableFuture
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -18,6 +19,7 @@ import com.yandex.runtime.image.ImageProvider
 import com.yanyushkin.roadsignrecognition.R
 import com.yanyushkin.roadsignrecognition.classifier.Analyzer
 import kotlinx.android.synthetic.main.activity_video_cam.*
+import org.opencv.android.OpenCVLoader
 import java.util.concurrent.Executors
 
 class VideoCamActivity : AppCompatActivity() {
@@ -27,12 +29,15 @@ class VideoCamActivity : AppCompatActivity() {
     private lateinit var imageAnalysis: ImageAnalysis
     private val executor = Executors.newSingleThreadExecutor()
     private var myLocation: PlacemarkMapObject? = null
+    private lateinit var analyzer: Analyzer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initMaps()
         setContentView(R.layout.activity_video_cam)
+        OpenCVLoader.initDebug()
 
+        analyzer = Analyzer(this)
         video_preview_view.post { startCamera() }
         val locationManager = getSystemService(Context.LOCATION_SERVICE)
 
@@ -48,13 +53,13 @@ class VideoCamActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        MapKitFactory.getInstance().onStart();
+        MapKitFactory.getInstance().onStart()
     }
 
     override fun onStop() {
         super.onStop()
         mapview.onStop();
-        MapKitFactory.getInstance().onStop();
+        MapKitFactory.getInstance().onStop()
     }
 
     private fun initMaps() {
@@ -84,6 +89,10 @@ class VideoCamActivity : AppCompatActivity() {
         imageAnalysis = ImageAnalysis.Builder().apply {
             setImageQueueDepth(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
         }.build()
-        imageAnalysis.setAnalyzer(executor, Analyzer(this))
+        imageAnalysis.setAnalyzer(executor, analyzer)
+        analyzer.state.observe(this, Observer {
+            photo2_iv.setImageBitmap(analyzer.stateBmp.value)
+            Toast.makeText(this, analyzer.state.value.toString(), Toast.LENGTH_LONG).show()
+        })
     }
 }

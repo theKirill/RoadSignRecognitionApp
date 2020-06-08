@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">RoadSignRecognition</string>
-    <string name="main_app_name_text">Распознаватель дорожных знаков в режиме реального времени</string>
+    <string name="main_app_name_text">Road Sign Recognizer</string>
     <string name="request_camera_permission_sb">Увы, без камеры ничего не распознаем!</string>
     <string name="camera_hint_text">Наведите камеру на дорожный знак</string>
     <string name="no_internet_sb">Отсутствует интернет-соединение\nПопробуйте позже или подключите Интернет</string>

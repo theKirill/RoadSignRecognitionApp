@@ -14,7 +14,7 @@ object OpenCVHelper {
     private val minValues = Scalar(117.0, 100.0, 45.0)
     private val maxValues = Scalar(255.0, 255.0, 255.0)
 
-    fun findSign(sourceBitmap: Bitmap): Bitmap {
+    fun findSign(sourceBitmap: Bitmap): Bitmap? {
         val rotatedBitmap = rotateBitmap(sourceBitmap)
         val sourceMat = rotatedBitmap.toMat()
 
@@ -22,9 +22,12 @@ object OpenCVHelper {
         val frame = bin(hsv)
         val contours = getContours(frame)
 
-        val boundingRect = Imgproc.boundingRect(contours[0])
-        val sign = Mat(sourceMat, boundingRect)
-        return sign.toBitmap()
+        var sign: Bitmap? = null
+        if (contours.size > 0) {
+            val boundingRect = Imgproc.boundingRect(contours[0])
+            sign = Mat(sourceMat, boundingRect).toBitmap()
+        }
+        return sign
     }
 
     private fun toHSV(sourceMat: Mat): Mat {

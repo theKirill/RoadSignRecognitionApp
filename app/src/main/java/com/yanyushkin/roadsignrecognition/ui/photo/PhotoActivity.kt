@@ -83,7 +83,7 @@ class PhotoActivity : AppCompatActivity() {
             }
         })
         photoVM.signBitmap.observe(this, Observer {
-            photo2_iv.setImageBitmap(photoVM.signBitmap.value!!)
+            photo_sign_iv.setImageBitmap(photoVM.signBitmap.value!!)
         })
     }
 

@@ -1,4 +1,4 @@
-package com.yanyushkin.roadsignrecognition.ui.photo
+package com.yanyushkin.roadsignrecognition.ui.video
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -20,7 +20,7 @@ import org.opencv.imgproc.Imgproc
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class PhotoVM(context: Context) : ViewModel() {
+class VideoVM(context: Context) : ViewModel() {
 
     @Inject
     lateinit var repository: RoadSignInfoRepository

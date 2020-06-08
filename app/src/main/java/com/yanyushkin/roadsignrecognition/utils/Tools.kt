@@ -1,11 +1,14 @@
 package com.yanyushkin.roadsignrecognition.utils
 
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.Matrix
+import android.graphics.*
+import android.media.Image
 import android.util.Log
+import androidx.camera.core.ImageProxy
 import com.yanyushkin.roadsignrecognition.IMAGE_HEIGHT
 import com.yanyushkin.roadsignrecognition.IMAGE_WIDTH
+import org.opencv.core.CvType
+import org.opencv.core.Mat
+import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -35,4 +38,44 @@ fun rotateBitmap(bitmap: Bitmap): Bitmap {
 fun getIndexOfMaxElem(array: FloatArray): Int {
     val maxIndex = array.indices.maxBy { array[it] }
     return maxIndex!!
+}
+
+fun getOutputImage(output: ByteBuffer): Bitmap {
+    output.rewind() // Rewind the output buffer after running.
+
+    val bitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888)
+    val pixels = IntArray(32 * 32) // Set your expected output's height and width
+    for (i in 0 until 32 * 32) {
+        val a = 0xFF
+        val r: Float = output?.float!! * 255.0f
+        val g: Float = output?.float!! * 255.0f
+        val b: Float = output?.float!! * 255.0f
+        pixels[i] = a shl 24 or (r.toInt() shl 16) or (g.toInt() shl 8) or b.toInt()
+    }
+    bitmap.setPixels(pixels, 0, 32, 0, 0, 32, 32)
+
+    return bitmap
+}
+
+fun Image.toBitmap(): Bitmap {
+    val yBuffer = planes[0].buffer // Y
+    val uBuffer = planes[1].buffer // U
+    val vBuffer = planes[2].buffer // V
+
+    val ySize = yBuffer.remaining()
+    val uSize = uBuffer.remaining()
+    val vSize = vBuffer.remaining()
+
+    val nv21 = ByteArray(ySize + uSize + vSize)
+
+    //U and V are swapped
+    yBuffer.get(nv21, 0, ySize)
+    vBuffer.get(nv21, ySize, vSize)
+    uBuffer.get(nv21, ySize + vSize, uSize)
+
+    val yuvImage = YuvImage(nv21, ImageFormat.NV21, this.width, this.height, null)
+    val out = ByteArrayOutputStream()
+    yuvImage.compressToJpeg(Rect(0, 0, yuvImage.width, yuvImage.height), 50, out)
+    val imageBytes = out.toByteArray()
+    return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }

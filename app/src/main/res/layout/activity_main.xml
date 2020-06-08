@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:text="@string/main_app_name_text"
         android:textAlignment="center"
+        android:layout_centerHorizontal="true"
         android:textSize="19sp"
         android:letterSpacing="0.01"
         android:textColor="@color/colorMain"

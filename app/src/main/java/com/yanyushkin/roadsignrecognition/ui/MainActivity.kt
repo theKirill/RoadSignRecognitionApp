@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.yanyushkin.roadsignrecognition.R
 import com.yanyushkin.roadsignrecognition.extensions.showSnackBar
+import com.yanyushkin.roadsignrecognition.ui.video.VideoCamActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
