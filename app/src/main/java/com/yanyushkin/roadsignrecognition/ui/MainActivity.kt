@@ -2,22 +2,26 @@ package com.yanyushkin.roadsignrecognition.ui
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.yanyushkin.roadsignrecognition.R
 import com.yanyushkin.roadsignrecognition.extensions.showSnackBar
 import com.yanyushkin.roadsignrecognition.ui.video.VideoCamActivity
+import com.yanyushkin.roadsignrecognition.utils.PermissionsHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private val REQUIRED_PERMISSIONS =
+        arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
+    private lateinit var permissionsHelper: PermissionsHelper
+    private var photo = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        permissionsHelper = PermissionsHelper(this, REQUIRED_PERMISSIONS)
         setClickListenersForButtons()
     }
 
@@ -27,52 +31,38 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSION && checkGrantResults(grantResults))
-            startActivity(Intent(this, PhotoCamActivity::class.java))
-        else
-            showSnackBar(main_layout, this, R.string.request_camera_permission_sb)
+        permissionsHelper.onRequestPermissionsResult(
+            requestCode,
+            permissions,
+            grantResults,
+            ::startActivity,
+            ::noPermissions
+        )
     }
 
     private fun setClickListenersForButtons() {
         photocam_btn.setOnClickListener {
-            if (hasAllPermissions()) {
-                startActivity(Intent(this, PhotoCamActivity::class.java))
-            } else {
-                if (shouldShowRequestPermissionRationale(REQUIRED_PERMISSIONS[0]))
-                    showSnackBar(main_layout, this, R.string.request_camera_permission_sb)
-
-                requestPermissions()
-            }
+            photo = true
+            permissionsHelper.checkAllPermissions(::startActivity, ::noPermissions)
         }
 
         videocam_btn.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    VideoCamActivity::class.java
-                )
-            )
+            photo = false
+            permissionsHelper.checkAllPermissions(::startActivity, ::noPermissions)
         }
     }
 
-    private fun hasAllPermissions(): Boolean =
-        REQUIRED_PERMISSIONS.all { permission ->
-            ContextCompat.checkSelfPermission(this, permission) == PERMISSION_GRANTED
-        }
-
-    private fun requestPermissions() =
-        ActivityCompat.requestPermissions(
+    private fun startActivity() {
+        val intent = if (photo)
+            Intent(this, PhotoCamActivity::class.java)
+        else Intent(
             this,
-            REQUIRED_PERMISSIONS,
-            REQUEST_CODE_PERMISSION
+            VideoCamActivity::class.java
         )
 
-    private fun checkGrantResults(grantResults: IntArray): Boolean =
-        grantResults.isNotEmpty() && grantResults.all { res -> res == PERMISSION_GRANTED }
-
-    companion object {
-        const val REQUEST_CODE_PERMISSION = 1
-        const val PERMISSION_GRANTED = PackageManager.PERMISSION_GRANTED
-        val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
+        startActivity(intent)
     }
+
+    private fun noPermissions() =
+        showSnackBar(main_layout, this, R.string.request_camera_permission_sb)
 }
