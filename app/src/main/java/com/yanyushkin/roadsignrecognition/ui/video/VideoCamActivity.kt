@@ -3,6 +3,7 @@ package com.yanyushkin.roadsignrecognition.ui.video
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -27,9 +28,11 @@ class VideoCamActivity : AppCompatActivity() {
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var imagePreview: Preview
     private lateinit var imageAnalysis: ImageAnalysis
+    private lateinit var cameraControl: CameraControl
     private val executor = Executors.newSingleThreadExecutor()
     private var myLocation: PlacemarkMapObject? = null
     private lateinit var analyzer: Analyzer
+    private var linearZoom = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +65,26 @@ class VideoCamActivity : AppCompatActivity() {
         MapKitFactory.getInstance().onStop()
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        return when (keyCode) {
+            KeyEvent.KEYCODE_VOLUME_UP -> {
+                if (linearZoom <= 0.9) {
+                    linearZoom += 0.1f
+                }
+                cameraControl.setLinearZoom(linearZoom)
+                true
+            }
+            KeyEvent.KEYCODE_VOLUME_DOWN -> {
+                if (linearZoom >= 0.1) {
+                    linearZoom -= 0.1f
+                }
+                cameraControl.setLinearZoom(linearZoom)
+                true
+            }
+            else -> super.onKeyDown(keyCode, event)
+        }
+    }
+
     private fun initMaps() {
         MapKitFactory.setApiKey("9533af34-15ed-4e4c-9821-62e46fe931b6")
         MapKitFactory.initialize(this)
@@ -78,6 +101,7 @@ class VideoCamActivity : AppCompatActivity() {
             val cameraProvider = cameraProviderFuture.get()
             val camera =
                 cameraProvider.bindToLifecycle(this, cameraSelector, imagePreview, imageAnalysis)
+            cameraControl = camera.cameraControl
             video_preview_view.preferredImplementationMode =
                 PreviewView.ImplementationMode.TEXTURE_VIEW
             imagePreview.setSurfaceProvider(video_preview_view.createSurfaceProvider(camera.cameraInfo))

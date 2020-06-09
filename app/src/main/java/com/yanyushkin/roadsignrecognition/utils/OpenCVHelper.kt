@@ -1,6 +1,7 @@
 package com.yanyushkin.roadsignrecognition.utils
 
 import android.graphics.Bitmap
+import android.util.Log
 import com.yanyushkin.roadsignrecognition.extensions.toBitmap
 import com.yanyushkin.roadsignrecognition.extensions.toMat
 import org.opencv.core.Core
@@ -26,6 +27,9 @@ object OpenCVHelper {
         var sign: Bitmap? = null
         if (contours.size > 0) {
             val boundingRect = Imgproc.boundingRect(contours[0])
+
+            Log.d("CONTOURS", boundingRect.toString())
+            if (boundingRect.width > 60 && boundingRect.height > 60)
             sign = Mat(sourceMat, boundingRect).toBitmap()
         }
         return sign
@@ -33,7 +37,7 @@ object OpenCVHelper {
 
     private fun toHSV(sourceMat: Mat): Mat {
         val hsv = Mat()
-        Imgproc.cvtColor(sourceMat, hsv, Imgproc.COLOR_BGR2HSV)
+        Imgproc.cvtColor(sourceMat, hsv, Imgproc.COLOR_RGB2HSV)
         return hsv
     }
 
