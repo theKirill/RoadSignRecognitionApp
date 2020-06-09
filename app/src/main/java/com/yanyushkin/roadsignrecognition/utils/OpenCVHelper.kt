@@ -20,6 +20,7 @@ object OpenCVHelper {
 
         val hsv = toHSV(sourceMat)
         val frame = bin(hsv)
+        Imgproc.Canny(frame, frame, 100.0, 200.0)
         val contours = getContours(frame)
 
         var sign: Bitmap? = null

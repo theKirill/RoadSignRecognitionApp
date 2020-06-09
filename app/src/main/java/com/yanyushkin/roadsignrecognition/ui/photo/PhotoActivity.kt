@@ -80,6 +80,10 @@ class PhotoActivity : AppCompatActivity() {
                 ScreenState.ERROR_OTHER -> {
                     showSnackBar(photo_main_layout, this, R.string.error_sb)
                 }
+                ScreenState.NOT_SIGN -> {
+                    bottom_sheet.gone()
+                    showSnackBar(photo_main_layout, this, R.string.no_sign_sb)
+                }
             }
         })
         photoVM.signBitmap.observe(this, Observer {

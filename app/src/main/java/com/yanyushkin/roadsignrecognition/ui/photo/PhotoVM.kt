@@ -30,16 +30,21 @@ class PhotoVM(context: Context) : ViewModel() {
     private val classifier: Classifier
 
     init {
-        App.component.injectsVM(this)
+        App.component.injectsPhotoVM(this)
         classifier = Classifier(context)
     }
 
     fun classify(sourceBitmap: Bitmap) {
         val sign = OpenCVHelper.findSign(sourceBitmap)
-        signBitmap.value = sign
-        val scaledBitmap = scaleBitmap(sign!!)
-        val signClass = classifier.classify(scaledBitmap)
-        getSignInfo(signClass)
+
+        if (sign != null) {
+            signBitmap.value = sign
+            val scaledBitmap = scaleBitmap(sign!!)
+            val signClass = classifier.classify(scaledBitmap)
+            getSignInfo(signClass)
+        } else {
+            state.value = ScreenState.NOT_SIGN
+        }
     }
 
     private fun getSignInfo(id: Int) =

@@ -5,4 +5,5 @@
     <string name="camera_hint_text">Наведите камеру на дорожный знак</string>
     <string name="no_internet_sb">Отсутствует интернет-соединение\nПопробуйте позже или подключите Интернет</string>
     <string name="error_sb">Произошла непредвиденная ошибка!</string>
+    <string name="no_sign_sb">На фото ни одного дорожного знака!</string>
 </resources>
