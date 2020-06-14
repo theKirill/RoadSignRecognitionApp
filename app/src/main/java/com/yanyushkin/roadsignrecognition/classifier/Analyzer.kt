@@ -26,7 +26,7 @@ class Analyzer(private val context: Context) : ImageAnalysis.Analyzer {
     lateinit var repository: RoadSignInfoRepository
     private var lastAnalyzedTimestamp = 0L
     private val classifier: Classifier
-    val state = MutableLiveData<String>()
+    val stateSignInfo = MutableLiveData<String>()
     val stateBmp = MutableLiveData<Bitmap>()
 
     init {
@@ -40,18 +40,15 @@ class Analyzer(private val context: Context) : ImageAnalysis.Analyzer {
         if (currentTimestamp - lastAnalyzedTimestamp >=
             java.util.concurrent.TimeUnit.SECONDS.toMillis(1)
         ) {
-            var img = image.image
-            val matrix = Matrix()
+            val img = image.image
             img?.let {
-                val b = image.image!!.toBitmap()
-                val bm = Bitmap.createBitmap(b, 0, 0, b.width, b.height, matrix, true)
-
-                val sign = OpenCVHelper.findSign(b)
+                val bmp = image.image!!.toBitmap()
+                val sign = OpenCVHelper.findSign(bmp)
                 sign?.let {
                     val scaledBitmap = scaleBitmap(sign)
+                    stateBmp.postValue(scaledBitmap)
                     val signClass = classifier.classify(scaledBitmap)
                     getSignInfo(signClass)
-                    stateBmp.postValue(scaledBitmap)
                 }
             }
             lastAnalyzedTimestamp = currentTimestamp
@@ -61,8 +58,8 @@ class Analyzer(private val context: Context) : ImageAnalysis.Analyzer {
 
     private fun getSignInfo(id: Int) =
         repository.getSignInfo(id).subscribe({
-            val kek = it.result!!.transform()
-            state.postValue(kek.name)
+            val info = it.result!!.transform()
+            stateSignInfo.postValue(info.name + "\n" + info.importantInfo)
         }, {
 
         })

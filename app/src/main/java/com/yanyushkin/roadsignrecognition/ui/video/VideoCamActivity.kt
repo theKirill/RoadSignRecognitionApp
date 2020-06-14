@@ -3,6 +3,7 @@ package com.yanyushkin.roadsignrecognition.ui.video
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.view.KeyEvent
 import android.widget.Toast
 import androidx.camera.core.*
@@ -21,9 +22,10 @@ import com.yanyushkin.roadsignrecognition.R
 import com.yanyushkin.roadsignrecognition.classifier.Analyzer
 import kotlinx.android.synthetic.main.activity_video_cam.*
 import org.opencv.android.OpenCVLoader
+import java.util.*
 import java.util.concurrent.Executors
 
-class VideoCamActivity : AppCompatActivity() {
+class VideoCamActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var imagePreview: Preview
@@ -33,6 +35,7 @@ class VideoCamActivity : AppCompatActivity() {
     private var myLocation: PlacemarkMapObject? = null
     private lateinit var analyzer: Analyzer
     private var linearZoom = 0f
+    private var tts: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,7 @@ class VideoCamActivity : AppCompatActivity() {
         setContentView(R.layout.activity_video_cam)
         OpenCVLoader.initDebug()
 
+        tts = TextToSpeech(this, this)
         analyzer = Analyzer(this)
         video_preview_view.post { startCamera() }
         val locationManager = getSystemService(Context.LOCATION_SERVICE)
@@ -114,9 +118,22 @@ class VideoCamActivity : AppCompatActivity() {
             setImageQueueDepth(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
         }.build()
         imageAnalysis.setAnalyzer(executor, analyzer)
-        analyzer.state.observe(this, Observer {
+        initObservers()
+    }
+
+    private fun initObservers() {
+        analyzer.stateBmp.observe(this, Observer {
             photo2_iv.setImageBitmap(analyzer.stateBmp.value)
-            Toast.makeText(this, analyzer.state.value.toString(), Toast.LENGTH_LONG).show()
         })
+        analyzer.stateSignInfo.observe(this, Observer {
+            val text = analyzer.stateSignInfo.value.toString().split('\n')
+            Toast.makeText(this, text[0], Toast.LENGTH_LONG).show()
+            tts!!.speak(text[1], TextToSpeech.QUEUE_FLUSH, null, "")
+        })
+    }
+
+    override fun onInit(p0: Int) {
+        if (p0 == TextToSpeech.SUCCESS)
+            tts!!.setLanguage(Locale.forLanguageTag("ru"))
     }
 }

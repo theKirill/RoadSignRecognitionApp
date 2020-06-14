@@ -29,7 +29,7 @@ object OpenCVHelper {
             val boundingRect = Imgproc.boundingRect(contours[0])
 
             Log.d("CONTOURS", boundingRect.toString())
-            if (boundingRect.width > 60 && boundingRect.height > 60)
+            if (boundingRect.width > 40 && boundingRect.height > 40)
             sign = Mat(sourceMat, boundingRect).toBitmap()
         }
         return sign

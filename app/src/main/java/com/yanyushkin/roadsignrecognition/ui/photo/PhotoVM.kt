@@ -1,9 +1,11 @@
 package com.yanyushkin.roadsignrecognition.ui.photo
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.util.Log
+import android.util.TimingLogger
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yanyushkin.roadsignrecognition.App
@@ -47,7 +49,8 @@ class PhotoVM(context: Context) : ViewModel() {
         }
     }
 
-    private fun getSignInfo(id: Int) =
+    @SuppressLint("CheckResult")
+    private fun getSignInfo(id: Int) {
         repository.getSignInfo(id).subscribe({
             signInfo.value = it.result!!.transform()
             state.value = ScreenState.SUCCESS
@@ -57,4 +60,5 @@ class PhotoVM(context: Context) : ViewModel() {
             else
                 state.value = ScreenState.ERROR_OTHER
         })
+    }
 }
