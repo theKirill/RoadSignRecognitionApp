@@ -31,9 +31,12 @@ class PhotoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo)
+
         photoVM =
             ViewModelProvider(this, BaseViewModelFactory { PhotoVM(this) }).get(PhotoVM::class.java)
+
         OpenCVLoader.initDebug()
+
         initViews()
         photoVM.classify(sourceBitmap)
         initObservers()
@@ -62,7 +65,14 @@ class PhotoActivity : AppCompatActivity() {
         parcelFileDescriptor.close()
     }
 
+    /**
+     * Инициализация наблюдателей
+     */
     private fun initObservers() {
+        photoVM.signBitmap.observe(this, Observer {
+            photo_sign_iv.setImageBitmap(photoVM.signBitmap.value!!)
+        })
+
         photoVM.state.observe(this, Observer {
             when (it) {
                 ScreenState.SUCCESS -> {
@@ -86,11 +96,11 @@ class PhotoActivity : AppCompatActivity() {
                 }
             }
         })
-        photoVM.signBitmap.observe(this, Observer {
-            photo_sign_iv.setImageBitmap(photoVM.signBitmap.value!!)
-        })
     }
 
+    /**
+     * Заполнение информации о знаке (выдвигающийся BottomBehaviour)
+     */
     private fun fillSignInfo(sign: RoadSignInfo) {
         sign_name_tv.text = sign.name
         sign_type_tv.text = sign.type

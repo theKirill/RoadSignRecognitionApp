@@ -36,6 +36,9 @@ class PhotoVM(context: Context) : ViewModel() {
         classifier = Classifier(context)
     }
 
+    /**
+     * Нахождение знака на фото, классификация
+     */
     fun classify(sourceBitmap: Bitmap) {
         val sign = OpenCVHelper.findSign(sourceBitmap)
 
@@ -49,6 +52,9 @@ class PhotoVM(context: Context) : ViewModel() {
         }
     }
 
+    /**
+     * Запрос на сервер (получение информаии о знаке)
+     */
     @SuppressLint("CheckResult")
     private fun getSignInfo(id: Int) {
         repository.getSignInfo(id).subscribe({

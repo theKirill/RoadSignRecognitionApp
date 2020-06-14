@@ -27,13 +27,16 @@ class Analyzer(private val context: Context) : ImageAnalysis.Analyzer {
     private var lastAnalyzedTimestamp = 0L
     private val classifier: Classifier
     val stateSignInfo = MutableLiveData<String>()
-    val stateBmp = MutableLiveData<Bitmap>()
+    val signBitmap = MutableLiveData<Bitmap>()
 
     init {
         App.component.injectsAnalyzer(this)
         classifier = Classifier(context)
     }
 
+    /**
+     * Анализ кадра
+     */
     @SuppressLint("UnsafeExperimentalUsageError")
     override fun analyze(image: ImageProxy) {
         val currentTimestamp = System.currentTimeMillis()
@@ -46,7 +49,7 @@ class Analyzer(private val context: Context) : ImageAnalysis.Analyzer {
                 val sign = OpenCVHelper.findSign(bmp)
                 sign?.let {
                     val scaledBitmap = scaleBitmap(sign)
-                    stateBmp.postValue(scaledBitmap)
+                    signBitmap.postValue(scaledBitmap)
                     val signClass = classifier.classify(scaledBitmap)
                     getSignInfo(signClass)
                 }

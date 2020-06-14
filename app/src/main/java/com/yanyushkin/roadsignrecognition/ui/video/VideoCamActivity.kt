@@ -69,6 +69,11 @@ class VideoCamActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         MapKitFactory.getInstance().onStop()
     }
 
+    override fun onInit(p0: Int) {
+        if (p0 == TextToSpeech.SUCCESS)
+            tts!!.setLanguage(Locale.forLanguageTag("ru"))
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         return when (keyCode) {
             KeyEvent.KEYCODE_VOLUME_UP -> {
@@ -94,6 +99,9 @@ class VideoCamActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         MapKitFactory.initialize(this)
     }
 
+    /**
+     * Инициализация камеры
+     */
     private fun startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -121,19 +129,24 @@ class VideoCamActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         initObservers()
     }
 
+    /**
+     * Инициализация наблюдателей
+     */
     private fun initObservers() {
-        analyzer.stateBmp.observe(this, Observer {
-            photo2_iv.setImageBitmap(analyzer.stateBmp.value)
+        analyzer.signBitmap.observe(this, Observer {
+            photo2_iv.setImageBitmap(analyzer.signBitmap.value)
         })
         analyzer.stateSignInfo.observe(this, Observer {
             val text = analyzer.stateSignInfo.value.toString().split('\n')
             Toast.makeText(this, text[0], Toast.LENGTH_LONG).show()
-            tts!!.speak(text[1], TextToSpeech.QUEUE_FLUSH, null, "")
+            speak(text[1])
         })
     }
 
-    override fun onInit(p0: Int) {
-        if (p0 == TextToSpeech.SUCCESS)
-            tts!!.setLanguage(Locale.forLanguageTag("ru"))
+    /**
+     * Голосовое предупреждение
+     */
+    private fun speak(text: String) {
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 }

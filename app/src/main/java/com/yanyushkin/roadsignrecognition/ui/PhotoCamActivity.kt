@@ -61,6 +61,9 @@ class PhotoCamActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Инициализация камеры
+     */
     private fun startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -86,6 +89,9 @@ class PhotoCamActivity : AppCompatActivity() {
             .build()
     }
 
+    /**
+     * Метод для взятия кадра
+     */
     private fun takePicture() {
         val file = File(
             externalMediaDirs.first(), SimpleDateFormat(FILENAME, Locale.US)
@@ -112,6 +118,9 @@ class PhotoCamActivity : AppCompatActivity() {
             })
     }
 
+    /**
+     * Открыть активити для отображения найденного знака
+     */
     private fun openPhotoActivity(uri: Uri) {
         Intent(this, PhotoActivity::class.java).run {
             putExtra(IMAGE_PATH_KEY, uri)

@@ -19,6 +19,9 @@ class Classifier(private val context: Context) {
         initInterpreter()
     }
 
+    /**
+     * Инициализация интерпретатора
+     */
     private fun initInterpreter() {
         val assetManager = context.assets
         val fd = assetManager.openFd(MODEL_NAME)
@@ -35,6 +38,9 @@ class Classifier(private val context: Context) {
         interpreter = Interpreter(tfLiteModel, options)
     }
 
+    /**
+     * Классификация дорожного знака
+     */
     fun classify(bitmap: Bitmap): Int {
         val input = prepareBitmap(bitmap)
         val result = Array(1) { FloatArray(NUM_CLASSES) }

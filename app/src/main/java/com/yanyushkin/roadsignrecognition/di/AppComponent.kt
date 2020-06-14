@@ -1,4 +1,4 @@
-package com.yanyushkin.roadsignrecognition.network.api
+package com.yanyushkin.roadsignrecognition.di
 
 import androidx.lifecycle.ViewModel
 import com.yanyushkin.roadsignrecognition.classifier.Analyzer
