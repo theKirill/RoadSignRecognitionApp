@@ -11,14 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.yandex.mapkit.mapview.MapView
-        android:id="@+id/mapview"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_gravity="bottom"/>
-
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/photo2_iv"
+        android:id="@+id/photo_sign_iv"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:scaleType="fitXY"

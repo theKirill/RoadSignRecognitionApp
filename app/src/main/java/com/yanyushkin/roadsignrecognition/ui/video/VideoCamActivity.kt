@@ -11,6 +11,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.google.common.util.concurrent.ListenableFuture
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
@@ -39,7 +40,6 @@ class VideoCamActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initMaps()
         setContentView(R.layout.activity_video_cam)
         OpenCVLoader.initDebug()
 
@@ -47,26 +47,14 @@ class VideoCamActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         analyzer = Analyzer(this)
         video_preview_view.post { startCamera() }
         val locationManager = getSystemService(Context.LOCATION_SERVICE)
-
-        mapview.map.move(
-            CameraPosition(Point(58.588506, 49.591216), 15.0f, 1.0f, 1.0f),
-            Animation(Animation.Type.SMOOTH, 1f), null
-        )
-        mapview.map.mapObjects.addPlacemark(
-            Point(58.588506, 49.591216),
-            ImageProvider.fromResource(this, R.drawable.location)
-        )
     }
 
     override fun onStart() {
         super.onStart()
-        MapKitFactory.getInstance().onStart()
     }
 
     override fun onStop() {
         super.onStop()
-        mapview.onStop();
-        MapKitFactory.getInstance().onStop()
     }
 
     override fun onInit(p0: Int) {
@@ -92,11 +80,6 @@ class VideoCamActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
             else -> super.onKeyDown(keyCode, event)
         }
-    }
-
-    private fun initMaps() {
-        MapKitFactory.setApiKey("9533af34-15ed-4e4c-9821-62e46fe931b6")
-        MapKitFactory.initialize(this)
     }
 
     /**
@@ -133,8 +116,12 @@ class VideoCamActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
      * Инициализация наблюдателей
      */
     private fun initObservers() {
-        analyzer.signBitmap.observe(this, Observer {
-            photo2_iv.setImageBitmap(analyzer.signBitmap.value)
+        analyzer.signURL.observe(this, Observer {
+            Glide
+                .with(this)
+                .load(analyzer.signURL.value)
+                .into(photo_sign_iv)
+            //photo2_iv.setImageBitmap(analyzer.signBitmap.value)
         })
         analyzer.stateSignInfo.observe(this, Observer {
             val text = analyzer.stateSignInfo.value.toString().split('\n')
@@ -144,7 +131,7 @@ class VideoCamActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     /**
-     * Голосовое предупреждение
+     * Голосовое предупреждение (не для всех знаков, если есть важная информация)
      */
     private fun speak(text: String) {
         tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")

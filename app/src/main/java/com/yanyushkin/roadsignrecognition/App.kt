@@ -3,7 +3,7 @@ package com.yanyushkin.roadsignrecognition
 import android.app.Application
 import com.yanyushkin.roadsignrecognition.di.NetworkModule
 import com.yanyushkin.roadsignrecognition.di.AppComponent
-import com.yanyushkin.roadsignrecognition.network.api.DaggerAppComponent
+import com.yanyushkin.roadsignrecognition.di.DaggerAppComponent
 
 class App : Application() {
 

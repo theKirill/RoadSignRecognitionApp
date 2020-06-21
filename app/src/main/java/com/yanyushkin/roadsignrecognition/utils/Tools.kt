@@ -35,10 +35,7 @@ fun rotateBitmap(bitmap: Bitmap): Bitmap {
     return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrixMAIN, true)
 }
 
-fun getIndexOfMaxElem(array: FloatArray): Int {
-    val maxIndex = array.indices.maxBy { array[it] }
-    return maxIndex!!
-}
+fun getIndexOfMaxElem(array: FloatArray): Int = array.indices.maxBy { array[it] }!!
 
 fun getOutputImage(output: ByteBuffer): Bitmap {
     output.rewind() // Rewind the output buffer after running.

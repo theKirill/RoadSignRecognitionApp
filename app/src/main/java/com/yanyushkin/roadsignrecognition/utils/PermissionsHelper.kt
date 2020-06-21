@@ -6,6 +6,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 
+/**
+ * Проверка необходимых разрешений для работы программы
+ */
 class PermissionsHelper(
     private val context: AppCompatActivity,
     private val REQUIRED_PERMISSIONS: Array<String>

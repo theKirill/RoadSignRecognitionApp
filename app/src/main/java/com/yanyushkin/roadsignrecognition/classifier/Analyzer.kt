@@ -27,7 +27,7 @@ class Analyzer(private val context: Context) : ImageAnalysis.Analyzer {
     private var lastAnalyzedTimestamp = 0L
     private val classifier: Classifier
     val stateSignInfo = MutableLiveData<String>()
-    val signBitmap = MutableLiveData<Bitmap>()
+    val signURL = MutableLiveData<String>()
 
     init {
         App.component.injectsAnalyzer(this)
@@ -49,7 +49,7 @@ class Analyzer(private val context: Context) : ImageAnalysis.Analyzer {
                 val sign = OpenCVHelper.findSign(bmp)
                 sign?.let {
                     val scaledBitmap = scaleBitmap(sign)
-                    signBitmap.postValue(scaledBitmap)
+                    //signBitmap.postValue(scaledBitmap)
                     val signClass = classifier.classify(scaledBitmap)
                     getSignInfo(signClass)
                 }
@@ -62,6 +62,7 @@ class Analyzer(private val context: Context) : ImageAnalysis.Analyzer {
     private fun getSignInfo(id: Int) =
         repository.getSignInfo(id).subscribe({
             val info = it.result!!.transform()
+            signURL.postValue(info.img)
             stateSignInfo.postValue(info.name + "\n" + info.importantInfo)
         }, {
 

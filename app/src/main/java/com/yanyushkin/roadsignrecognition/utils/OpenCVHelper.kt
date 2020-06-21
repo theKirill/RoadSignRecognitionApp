@@ -27,10 +27,8 @@ object OpenCVHelper {
         var sign: Bitmap? = null
         if (contours.size > 0) {
             val boundingRect = Imgproc.boundingRect(contours[0])
-
-            Log.d("CONTOURS", boundingRect.toString())
             if (boundingRect.width > 40 && boundingRect.height > 40)
-            sign = Mat(sourceMat, boundingRect).toBitmap()
+                sign = Mat(sourceMat, boundingRect).toBitmap()
         }
         return sign
     }
